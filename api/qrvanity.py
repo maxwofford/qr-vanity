@@ -16,8 +16,11 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type','text/html')
         self.end_headers()
-        result = self.qr_codify()
-        self.wfile.write((f"<h1>{result[0]}</h1>").encode())
+        results = self.qr_codify()
+        tag_list = list(map(lambda x: bytes(f"<img src='{x}'/>", encoding='utf8'), results))
+        tag_string = b''.join(tag_list)
+
+        self.wfile.write(tag_string)
         return
 
     def qr_codify(self):
