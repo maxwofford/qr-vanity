@@ -11,14 +11,13 @@ import pyqrcode
 import zbarlight
 from http.server import BaseHTTPRequestHandler
 
-
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header('Content-type','text/html')
         self.end_headers()
         result = self.qr_codify()
-        self.wfile.write(bytes(f"<h1>{result[0]}</h1>", "utf-8"))
+        self.wfile.write((f"<h1>{result[0]}</h1>").encode())
         return
 
     def qr_codify(self):
@@ -70,8 +69,8 @@ class handler(BaseHTTPRequestHandler):
                             output_image.save(buf, format="JPEG")
                             img_str = base64.b64encode(buf.getvalue())
                             # img_base64 = bytes("data:image/jpeg;base64,",encoding="utf-8") + img_str
-                            img_base64 = "data:image/jpeg;base64," + img_str
-                            results.append(img_base64)
+                            img_base64 = "data:image/jpeg;base64,".encode()+ img_str
+                            results.append(img_base64.decode())
             if success:
                 print("fit found in version {}".format(version))
                 return results
